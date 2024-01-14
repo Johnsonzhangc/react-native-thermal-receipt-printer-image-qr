@@ -69,7 +69,6 @@ export function exchange_text(text, options) {
     var temp = "";
     for (var i = 0; i < text.length; i++) {
         var ch = text[i];
-        console.log("handling this char now", ch)
         switch (ch) {
             case "<":
                 bytes.concat(iconv.encode(temp, m_options.encoding));

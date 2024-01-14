@@ -69,6 +69,7 @@ const textTo64Buffer = (text: string, opts: PrinterOptions) => {
   };
 
   const fixAndroid = "\n";
+  console.log("we will exchange text soon")
   const buffer = EPToolkit.exchange_text(text + fixAndroid, options);
   return buffer.toString("base64");
 };
