@@ -2,6 +2,8 @@ import { Buffer } from "buffer";
 import * as iconv from "iconv-lite";
 // import * as Jimp from "jimp";
 import BufferHelper from "./buffer-helper";
+let EscPosEncoder = require('esc-pos-encoder');
+let encoder = new EscPosEncoder(/*{codepageMapping: 'zjiang'}*/);
 var init_printer_bytes = Buffer.from([27, 64]);
 var l_start_bytes = Buffer.from([27, 97, 0]);
 var l_end_bytes = Buffer.from([]);
@@ -59,6 +61,18 @@ var default_options = {
     tailingLine: true,
     encoding: "UTF8",
 };
+
+function thaiEncodingWrapper(thai) {
+
+        let encodingString = encoder
+            .codepage('cp874')
+            //.codepage('auto')
+            .text(thai)
+            .encode();
+    
+        return encodingString.slice(3);
+}
+
 export function exchange_text(text, options) {
     var m_options = options || default_options;
     var bytes = new BufferHelper();
@@ -71,7 +85,8 @@ export function exchange_text(text, options) {
         var ch = text[i];
         switch (ch) {
             case "<":
-                bytes.concat(iconv.encode(temp, m_options.encoding));
+                //bytes.concat(iconv.encode(temp, m_options.encoding));
+                bytes.concat(thaiEncodingWrapper(temp))
                 temp = "";
                 // add bytes for changing font and justifying text
                 for (var tag in controller) {
@@ -83,7 +98,8 @@ export function exchange_text(text, options) {
                 break;
             case "\n":
                 temp = "".concat(temp).concat(ch);
-                bytes.concat(iconv.encode(temp, m_options.encoding));
+                //bytes.concat(iconv.encode(temp, m_options.encoding));
+                bytes.concat(thaiEncodingWrapper(temp))
                 bytes.concat(reset_bytes);
                 temp = "";
                 break;
@@ -92,7 +108,7 @@ export function exchange_text(text, options) {
                 break;
         }
     }
-    temp.length && bytes.concat(iconv.encode(temp, m_options.encoding));
+    temp.length && bytes.concat(thaiEncodingWrapper(temp))//bytes.concat(iconv.encode(temp, m_options.encoding));
     // check for "encoding" flag
     if (typeof m_options["encoding"] === "boolean" && options_controller["encoding"]) {
         bytes.concat(options_controller["encoding"]);
