@@ -403,6 +403,7 @@ const NetPrinter = {
     timeout?: number
   ): Promise<INetPrinter> =>
     new Promise(async (resolve, reject) => {
+      console.log("connecting printer");
       try {
         await connectToHost(host, timeout);
         RNNetPrinter.connectPrinter(
