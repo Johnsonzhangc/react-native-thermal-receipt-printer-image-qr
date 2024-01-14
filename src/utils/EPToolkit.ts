@@ -28,7 +28,7 @@ var d_end_bytes = Buffer.from([27, 33, 0, 28, 33, 0]);
 var cut_bytes = Buffer.from([27, 105]);
 var beep_bytes = Buffer.from([27, 66, 3, 2]);
 var line_bytes = Buffer.from([10, 10, 10, 10, 10]);
-var thai_code_page = Buffer.from([27, 116, -1]);
+var thai_code_page = encoder.raw([0x1b, 0x74, 255]).encode();//Buffer.from([27, 116, -1]);
 var chinse_mode_off = Buffer.from([28, 46])
 var options_controller = {
     cut: cut_bytes,
