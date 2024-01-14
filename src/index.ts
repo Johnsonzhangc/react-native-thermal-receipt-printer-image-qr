@@ -69,7 +69,6 @@ const textTo64Buffer = (text: string, opts: PrinterOptions) => {
   };
 
   const fixAndroid = "\n";
-  console.log("we will exchange text soon")
   const buffer = EPToolkit.exchange_text(text + fixAndroid, options);
   return buffer.toString("base64");
 };
@@ -424,6 +423,7 @@ const NetPrinter = {
     }),
 
   printText: (text: string, opts = {}): void => {
+    console.log("we will exchange text soon")
     if (Platform.OS === "ios") {
       const processedText = textPreprocessingIOS(text, false, false);
       RNNetPrinter.printRawData(
