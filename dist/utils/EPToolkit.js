@@ -1,7 +1,8 @@
 import { Buffer } from "buffer";
-import * as iconv from "iconv-lite";
 // import * as Jimp from "jimp";
 import BufferHelper from "./buffer-helper";
+var EscPosEncoder = require('esc-pos-encoder');
+var encoder = new EscPosEncoder( /*{codepageMapping: 'zjiang'}*/);
 var init_printer_bytes = Buffer.from([27, 64]);
 var l_start_bytes = Buffer.from([27, 97, 0]);
 var l_end_bytes = Buffer.from([]);
@@ -26,6 +27,8 @@ var d_end_bytes = Buffer.from([27, 33, 0, 28, 33, 0]);
 var cut_bytes = Buffer.from([27, 105]);
 var beep_bytes = Buffer.from([27, 66, 3, 2]);
 var line_bytes = Buffer.from([10, 10, 10, 10, 10]);
+var thai_code_page = encoder.raw([0x1b, 0x74, 255]).encode(); //Buffer.from([27, 116, -1]);
+var chinse_mode_off = Buffer.from([28, 46]);
 var options_controller = {
     cut: cut_bytes,
     beep: beep_bytes,
@@ -57,17 +60,28 @@ var default_options = {
     tailingLine: true,
     encoding: "UTF8",
 };
+function thaiEncodingWrapper(thai) {
+    var encodingString = encoder
+        .codepage('cp874')
+        //.codepage('auto')
+        .text(thai)
+        .encode();
+    return encodingString.slice(3);
+}
 export function exchange_text(text, options) {
     var m_options = options || default_options;
     var bytes = new BufferHelper();
     bytes.concat(init_printer_bytes);
     bytes.concat(default_space_bytes);
+    bytes.concat(chinse_mode_off);
+    bytes.concat(thai_code_page);
     var temp = "";
     for (var i = 0; i < text.length; i++) {
         var ch = text[i];
         switch (ch) {
             case "<":
-                bytes.concat(iconv.encode(temp, m_options.encoding));
+                //bytes.concat(iconv.encode(temp, m_options.encoding));
+                bytes.concat(thaiEncodingWrapper(temp));
                 temp = "";
                 // add bytes for changing font and justifying text
                 for (var tag in controller) {
@@ -79,7 +93,8 @@ export function exchange_text(text, options) {
                 break;
             case "\n":
                 temp = "".concat(temp).concat(ch);
-                bytes.concat(iconv.encode(temp, m_options.encoding));
+                //bytes.concat(iconv.encode(temp, m_options.encoding));
+                bytes.concat(thaiEncodingWrapper(temp));
                 bytes.concat(reset_bytes);
                 temp = "";
                 break;
@@ -88,7 +103,7 @@ export function exchange_text(text, options) {
                 break;
         }
     }
-    temp.length && bytes.concat(iconv.encode(temp, m_options.encoding));
+    temp.length && bytes.concat(thaiEncodingWrapper(temp)); //bytes.concat(iconv.encode(temp, m_options.encoding));
     // check for "encoding" flag
     if (typeof m_options["encoding"] === "boolean" && options_controller["encoding"]) {
         bytes.concat(options_controller["encoding"]);
