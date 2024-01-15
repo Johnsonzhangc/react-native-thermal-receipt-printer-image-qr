@@ -71,7 +71,7 @@
   "license": "ISC",
   "react-native": "dist/index.js",
   "module": "dist/module/index.js",
-  "types": "dist/typescript/src/index.d.ts",
+  "types": "dist/typescript/index.d.ts",
   "react-native-builder-bob": {
     "source": "dist",
     "output": "dist",
