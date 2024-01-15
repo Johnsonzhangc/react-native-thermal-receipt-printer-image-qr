@@ -9,7 +9,8 @@
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn && yarn pods",
     "build": "rimraf ./dist && tsc",
-    "test": "jshint hello.js"
+    "test": "jshint hello.js",
+    "prepare": "bob build"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,11 @@
   },
   "files": [
     "dist",
+    "dist",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__",
+    "src",
     "android",
     "ios",
     "react-native-thermal-receipt-printer-image-qr.podspec"
@@ -53,6 +59,7 @@
     "pod-install": "^0.1.10",
     "react": "^16.13.1",
     "react-native": "^0.64.1",
+    "react-native-builder-bob": "^0.23.2",
     "rimraf": "^3.0.2",
     "typescript": "^4.0.2"
   },
@@ -61,5 +68,19 @@
   },
   "author": "thiendangit",
   "homepage": "https://github.com/thiendangit/react-native-thermal-receipt-printer-image-qr#readme",
-  "license": "ISC"
+  "license": "ISC",
+  "react-native": "dist/index.js",
+  "module": "dist/module/index.js",
+  "types": "dist/typescript/src/index.d.ts",
+  "react-native-builder-bob": {
+    "source": "dist",
+    "output": "dist",
+    "targets": [
+      "module"
+    ]
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "dist/"
+  ]
 }
