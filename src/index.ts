@@ -423,7 +423,6 @@ const NetPrinter = {
     }),
 
   printText: (text: string, opts = {}): void => {
-    console.log("we will exchange text soon")
     if (Platform.OS === "ios") {
       const processedText = textPreprocessingIOS(text, false, false);
       RNNetPrinter.printRawData(
@@ -435,6 +434,37 @@ const NetPrinter = {
       RNNetPrinter.printRawData(textTo64Buffer(text, opts), (error: Error) =>
         console.warn(error)
       );
+    }
+  },
+
+  printTextImage: (text: string, opts = {}): void => {
+    if (Platform.OS === "ios") {
+      RNNetPrinter.printTextImage(
+        text,
+        opts,
+        (error: Error) => console.warn(error)
+      );
+    } else {
+      /*
+      RNNetPrinter.printRawData(textTo64Buffer(text, opts), (error: Error) =>
+        console.warn(error)
+      );
+      */
+    }
+  },
+
+  sendHex: (hex: string): void => {
+    if (Platform.OS === "ios") {
+      RNNetPrinter.sendHex(
+        hex,
+        (error: Error) => console.warn(error)
+      );
+    } else {
+      /*
+      RNNetPrinter.printRawData(textTo64Buffer(text, opts), (error: Error) =>
+        console.warn(error)
+      );
+      */
     }
   },
 
