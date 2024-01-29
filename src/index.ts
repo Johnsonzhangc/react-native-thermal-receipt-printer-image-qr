@@ -229,7 +229,7 @@ const BLEPrinter = {
   init: (): Promise<void> =>
     new Promise((resolve, reject) =>
       RNBLEPrinter.init(
-        () => resolve(),
+        () => {console.log("success"); resolve()},
         (error: Error) => reject(error)
       )
     ),
