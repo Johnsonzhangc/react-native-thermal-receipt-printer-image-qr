@@ -384,7 +384,7 @@ const NetPrinter = {
   init: (): Promise<void> =>
     new Promise((resolve, reject) =>
       RNNetPrinter.init(
-        () => {console.log("success"); resolve()},
+        () => {console.warn("we are here"); resolve()},
         (error: Error) => reject(error)
       )
     ),
