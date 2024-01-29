@@ -229,7 +229,7 @@ const BLEPrinter = {
   init: (): Promise<void> =>
     new Promise((resolve, reject) =>
       RNBLEPrinter.init(
-        () => {console.log("success"); resolve()},
+        () => resolve(),
         (error: Error) => reject(error)
       )
     ),
@@ -384,7 +384,7 @@ const NetPrinter = {
   init: (): Promise<void> =>
     new Promise((resolve, reject) =>
       RNNetPrinter.init(
-        () => resolve(),
+        () => {console.log("success"); resolve()},
         (error: Error) => reject(error)
       )
     ),
