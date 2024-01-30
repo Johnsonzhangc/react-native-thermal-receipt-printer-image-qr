@@ -168,6 +168,16 @@ RCT_EXPORT_METHOD(printImageBase64:(NSString *)base64Qr
     }
 }
 
+RCT_EXPORT_METHOD(sendHex:(NSString *)hex
+                  fail:(RCTResponseSenderBlock)errorCallback) {
+    @try {
+        !m_printer ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer"] : nil;
+        [[PrinterSDK defaultPrinterSDK] sendHex:hex];
+    } @catch (NSException *exception) {
+        errorCallback(@[exception.reason]);
+    }
+}
+
 -(UIImage *)getPrintImage:(UIImage *)image
            printerOptions:(NSDictionary *)options {
    NSNumber* nWidth = [options valueForKey:@"imageWidth"];
