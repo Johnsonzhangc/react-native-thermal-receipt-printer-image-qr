@@ -3,7 +3,7 @@
   "version": "0.1.11",
   "description": "Fork of react-native-thermal-receipt-printer. A React Native Library to support USB/BLE/Net printer",
   "main": "dist/index.js",
-  "source": "src/index.ts",
+  "source": "dist/index.ts",
   "scripts": {
     "pods": "cd example && pod-install --quiet",
     "example": "yarn --cwd example",

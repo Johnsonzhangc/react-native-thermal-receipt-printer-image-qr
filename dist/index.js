@@ -321,11 +321,19 @@ var BLEPrinter = {
             });
         }
     },
+    sendHex: function (text) {
+        if (Platform.OS === "ios") {
+            RNBLEPrinter.sendHex(text, function (error) { return console.warn(error); });
+        }
+        else {
+
+        }
+    },
 };
 var NetPrinter = {
     init: function () {
         return new Promise(function (resolve, reject) {
-            return RNNetPrinter.init(function () { console.log("we will be there"); return resolve(); }, function (error) { return reject(error); });
+            return RNNetPrinter.init(function () {  return resolve(); }, function (error) { return reject(error); });
         });
     },
     getDeviceList: function () {
