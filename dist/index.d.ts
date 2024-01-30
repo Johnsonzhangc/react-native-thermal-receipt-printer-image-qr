@@ -99,7 +99,6 @@ declare const BLEPrinter: {
      * 58mm => 30 character
      */
     printColumnsText: (texts: string[], columnWidth: number[], columnAlignment: ColumnAlignment[], columnStyle: string[], opts?: PrinterOptions) => void;
-    sendHex: (text: string) => void;
 };
 declare const NetPrinter: {
     init: () => Promise<void>;
@@ -108,7 +107,6 @@ declare const NetPrinter: {
     closeConn: () => Promise<void>;
     printText: (text: string, opts?: {}) => void;
     printTextImage: (text: string, opts?: {}) => void;
-    sendHex: (hex: string) => void;
     printBill: (text: string, opts?: PrinterOptions) => void;
     /**
      * image url
@@ -133,7 +131,6 @@ declare const NetPrinter: {
      * 58mm => 30 character
      */
     printColumnsText: (texts: string[], columnWidth: number[], columnAlignment: ColumnAlignment[], columnStyle?: string[], opts?: PrinterOptions) => void;
-    sendHex: (text: string) => void;
 };
 declare const NetPrinterEventEmitter: NativeEventEmitter;
 export { COMMANDS, NetPrinter, BLEPrinter, USBPrinter, NetPrinterEventEmitter };

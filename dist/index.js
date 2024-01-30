@@ -298,6 +298,7 @@ var BLEPrinter = {
      */
     printRaw: function (text) {
         if (Platform.OS === "ios") {
+            RNBLEPrinter.sendHex(text, function (error) { return console.warn(error); });
         }
         else {
             RNBLEPrinter.printRawData(text, function (error) { return console.warn(error); });
@@ -319,14 +320,6 @@ var BLEPrinter = {
             RNBLEPrinter.printRawData(textTo64Buffer(result, opts), function (error) {
                 return console.warn(error);
             });
-        }
-    },
-    sendHex: function (text) {
-        if (Platform.OS === "ios") {
-            RNBLEPrinter.sendHex(text, function (error) { return console.warn(error); });
-        }
-        else {
-
         }
     },
 };
@@ -393,18 +386,6 @@ var NetPrinter = {
             */
         }
     },
-    sendHex: function (hex) {
-        if (Platform.OS === "ios") {
-            RNNetPrinter.sendHex(hex, function (error) { return console.warn(error); });
-        }
-        else {
-            /*
-            RNNetPrinter.printRawData(textTo64Buffer(text, opts), (error: Error) =>
-              console.warn(error)
-            );
-            */
-        }
-    },
     printBill: function (text, opts) {
         var _a, _b;
         if (opts === void 0) { opts = {}; }
@@ -458,6 +439,7 @@ var NetPrinter = {
      */
     printRaw: function (text) {
         if (Platform.OS === "ios") {
+            RNNetPrinter.sendHex(text, function (error) { return console.warn(error); });
         }
         else {
             RNNetPrinter.printRawData(text, function (error) { return console.warn(error); });
@@ -492,16 +474,6 @@ var NetPrinter = {
         );
       } else {
         
-      }
-    },
-  
-    sendHex: function (hex) {
-      if (Platform.OS === "ios") {
-        RNNetPrinter.sendHex(
-          hex,
-          function (error) { console.warn(error)}
-        );
-      } else {
       }
     },
 };
