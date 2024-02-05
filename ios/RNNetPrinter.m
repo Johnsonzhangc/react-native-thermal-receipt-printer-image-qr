@@ -192,7 +192,7 @@ RCT_EXPORT_METHOD(printTextImage:(NSString *)text
 }
 
 RCT_EXPORT_METHOD(sendHex:(NSString *)hex
-                  printerOptions:(NSDictionary *)options
+                  //printerOptions:(NSDictionary *)options
                   fail:(RCTResponseSenderBlock)errorCallback) {
     @try {
         !connected_ip ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer"] : nil;
