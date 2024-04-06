@@ -236,6 +236,20 @@ var BLEPrinter = {
             });
         }
     },
+    printTextImage: function (text, opts) {
+        if (opts === void 0) { opts = {}; }
+        if (Platform.OS === "ios") {
+            //var processedText = textPreprocessingIOS(text, false, false);
+            RNBLEPrinter.printTextImage(text, opts, function (error) { return console.warn(error); });
+        }
+        else {
+            /*
+            RNBLEPrinter.printRawData(textTo64Buffer(text, opts), function (error) {
+                return console.warn(error);
+            });
+            */
+        }
+    },
     printBill: function (text, opts) {
         var _a, _b;
         if (opts === void 0) { opts = {}; }
