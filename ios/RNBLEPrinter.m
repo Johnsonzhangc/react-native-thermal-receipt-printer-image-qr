@@ -180,7 +180,7 @@ RCT_EXPORT_METHOD(printTextImage:(NSString *)text
 
         !m_printer ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer"] : nil;
 
-        NSLog(@text);
+        NSLog(@"we are here To Print = %@", text);
 
         [[PrinterSDK defaultPrinterSDK] printTextImage:text];
         beep ? [[PrinterSDK defaultPrinterSDK] beep] : nil;
