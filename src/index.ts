@@ -272,6 +272,18 @@ const BLEPrinter = {
     }
   },
 
+  printTextImage: (text: string, opts = {}): void => {
+    if (Platform.OS === "ios") {
+      RNBLEPrinter.printTextImage(
+        text,
+        opts,
+        (error: Error) => console.warn(error)
+      );
+    } else {
+      
+    }
+  },
+
   printBill: (text: string, opts: PrinterOptions = {}): void => {
     if (Platform.OS === "ios") {
       const processedText = textPreprocessingIOS(
