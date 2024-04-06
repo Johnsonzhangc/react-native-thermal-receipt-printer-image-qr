@@ -178,7 +178,7 @@ RCT_EXPORT_METHOD(printTextImage:(NSString *)text
         BOOL beep = (BOOL)[beepPtr intValue];
         BOOL cut = (BOOL)[cutPtr intValue];
 
-        !connected_ip ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer"] : nil;
+        !m_printer ? [NSException raise:@"Invalid connection" format:@"Can't connect to printer"] : nil;
 
         // [[PrinterSDK defaultPrinterSDK] printTestPaper];
         [[PrinterSDK defaultPrinterSDK] printTextImage:text];
