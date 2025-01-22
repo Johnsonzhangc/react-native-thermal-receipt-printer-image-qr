@@ -216,7 +216,7 @@ RCT_EXPORT_METHOD(sendHex:(NSString *)hex
        newHeight = [nHeight floatValue];
    }
 
-   CGFloat paddingX = 0;
+   CGFloat paddingX = 250;
    if(nPaddingX != nil) {
        paddingX = [nPaddingX floatValue];
    }
