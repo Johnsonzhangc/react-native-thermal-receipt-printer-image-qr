@@ -122,7 +122,7 @@ public class USBPrinterAdapter implements PrinterAdapter {
         //Resove Android SDK >=34
         //mContext.registerReceiver(mUsbDeviceReceiver, filter);
         if (Build.VERSION.SDK_INT >= 34) {
-            mContext.registerReceiver(mUsbDeviceReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+            mContext.registerReceiver(mUsbDeviceReceiver, filter, Context.RECEIVER_EXPORTED);
         } else {
             mContext.registerReceiver(mUsbDeviceReceiver, filter);
         }
