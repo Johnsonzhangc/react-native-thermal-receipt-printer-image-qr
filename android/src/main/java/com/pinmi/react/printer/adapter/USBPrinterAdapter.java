@@ -20,6 +20,7 @@ import android.util.Log;
 import android.widget.Toast;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 
 
 import com.facebook.react.bridge.Callback;
@@ -109,14 +110,22 @@ public class USBPrinterAdapter implements PrinterAdapter {
         this.mUSBManager = (UsbManager) this.mContext.getSystemService(Context.USB_SERVICE);
         //Resolve the Android SDK >= 34 cannot use FLAG_MUTABLE problem
         //this.mPermissionIndent = PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-        this.mPermissionIndent = PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        if (Build.VERSION.SDK_INT >= 34) {
+            this.mPermissionIndent = PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        } else {
+            this.mPermissionIndent = PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        }
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         filter.addAction(UsbManager.ACTION_USB_ACCESSORY_ATTACHED);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
         //Resove Android SDK >=34
         //mContext.registerReceiver(mUsbDeviceReceiver, filter);
-        mContext.registerReceiver(mUsbDeviceReceiver, filter, RECEIVER_NOT_EXPORTED);
+        if (Build.VERSION.SDK_INT >= 34) {
+            mContext.registerReceiver(mUsbDeviceReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            mContext.registerReceiver(mUsbDeviceReceiver, filter);
+        }
         Log.v(LOG_TAG, "RNUSBPrinter initialized");
         successCallback.invoke();
     }
