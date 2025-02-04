@@ -113,7 +113,7 @@ public class USBPrinterAdapter implements PrinterAdapter {
         if (Build.VERSION.SDK_INT >= 34) {
             val intent = Intent(ACTION_USB_PERMISSION);
             intent.setPackage("com.vtra.imenu");
-            this.mPermissionIndent = PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+            this.mPermissionIndent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         } else {
             this.mPermissionIndent = PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         }
