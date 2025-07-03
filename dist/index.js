@@ -457,11 +457,19 @@ var NetPrinter = {
      * @param text
      */
     printRaw: function (text) {
-        if (Platform.OS === "ios") {
-        }
-        else {
-            RNNetPrinter.printRawData(text, function (error) { return console.warn(error); });
-        }
+        return new Promise(function (resolve, reject) {
+            if (Platform.OS === "ios") {
+                resolve({ result: "ios" });
+            }
+            else {
+                RNNetPrinter.printRawData(text, function (error) {
+                    if (error)
+                        reject(error);
+                    else
+                        resolve({ result: "成功了" });
+                });
+            }
+        });
     },
     /**
      * `columnWidth`
@@ -471,30 +479,18 @@ var NetPrinter = {
     printColumnsText: function (texts, columnWidth, columnAlignment, columnStyle, opts) {
         if (columnStyle === void 0) { columnStyle = []; }
         if (opts === void 0) { opts = {}; }
-        return new Promise(function (resolve, reject) {
-            var result = processColumnText(texts, columnWidth, columnAlignment, columnStyle);
-            if (Platform.OS === "ios") {
-                var processedText = textPreprocessingIOS(result, false, false);
-                RNNetPrinter.printRawData(processedText.text, processedText.opts, function (error) {
-                    if (error) {
-                        reject(error);
-                    }
-                    else {
-                        resolve({ result: "成功了" });
-                    }
-                });
-            }
-            else {
-                RNNetPrinter.printRawData(textTo64Buffer(result, opts), function (error) {
-                    if (error) {
-                        reject(error);
-                    }
-                    else {
-                        resolve({ result: "成功了" });
-                    }
-                });
-            }
-        });
+        var result = processColumnText(texts, columnWidth, columnAlignment, columnStyle);
+        if (Platform.OS === "ios") {
+            var processedText = textPreprocessingIOS(result, false, false);
+            RNNetPrinter.printRawData(processedText.text, processedText.opts, function (error) {
+                console.warn(error);
+            });
+        }
+        else {
+            RNNetPrinter.printRawData(textTo64Buffer(result, opts), function (error) {
+                console.warn(error);
+            });
+        }
     },
 };
 var NetPrinterEventEmitter = Platform.OS === "ios"

@@ -5,9 +5,11 @@ import { processColumnText } from "./utils/print-column";
 import { COMMANDS } from "./utils/printer-commands";
 import { connectToHost } from "./utils/net-connect";
 
+
 const RNUSBPrinter = NativeModules.RNUSBPrinter;
 const RNBLEPrinter = NativeModules.RNBLEPrinter;
 const RNNetPrinter = NativeModules.RNNetPrinter;
+
 
 export interface PrinterOptions {
   beep?: boolean;
@@ -541,12 +543,17 @@ const NetPrinter = {
    * Android print with encoder
    * @param text
    */
-  printRaw: (text: string): void => {
-    if (Platform.OS === "ios") {
-    } else {
-      RNNetPrinter.printRawData(text, (error: Error) => console.warn(error));
-    }
-  },
+  printRaw: (text: string): Promise<object> =>
+    new Promise((resolve, reject) => {
+      if (Platform.OS === "ios") {
+        resolve({ result: "ios" });
+      } else {
+        RNNetPrinter.printRawData(text, (error: Error | null) => {
+          if (error) reject(error);
+          else resolve({ result: "成功了" });
+        });
+      }
+    }),
 
   /**
    * `columnWidth`
@@ -559,39 +566,29 @@ const NetPrinter = {
     columnAlignment: ColumnAlignment[],
     columnStyle: string[] = [],
     opts: PrinterOptions = {}
-  ): Promise<object> =>
-    new Promise((resolve, reject) => {
-      const result = processColumnText(
-        texts,
-        columnWidth,
-        columnAlignment,
-        columnStyle
-      );
-      if (Platform.OS === "ios") {
-        const processedText = textPreprocessingIOS(result, false, false);
-        RNNetPrinter.printRawData(
-          processedText.text,
-          processedText.opts,
-          (error: Error | null) => {
-            if (error) {
-              reject(error);
-            } else {
-              resolve({result: "成功了"});
-            }
-          }
-        );
-      } else {
-        RNNetPrinter.printRawData(textTo64Buffer(result, opts), (error: Error | null) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve({result: "成功了"});
-          }
+  ): void => {
+    const result = processColumnText(
+      texts,
+      columnWidth,
+      columnAlignment,
+      columnStyle
+    );
+    if (Platform.OS === "ios") {
+      const processedText = textPreprocessingIOS(result, false, false);
+      RNNetPrinter.printRawData(
+        processedText.text,
+        processedText.opts,
+        (error: Error) => {
+          console.warn(error)
         }
-        );
+      );
+    } else {
+      RNNetPrinter.printRawData(textTo64Buffer(result, opts), (error: Error) => {
+        console.warn(error)
       }
+      );
     }
-    ),
+  },
 };
 
 const NetPrinterEventEmitter =

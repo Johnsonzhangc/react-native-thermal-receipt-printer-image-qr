@@ -126,13 +126,13 @@ declare const NetPrinter: {
      * Android print with encoder
      * @param text
      */
-    printRaw: (text: string) => void;
+    printRaw: (text: string) => Promise<object>;
     /**
      * `columnWidth`
      * 80mm => 46 character
      * 58mm => 30 character
      */
-    printColumnsText: (texts: string[], columnWidth: number[], columnAlignment: ColumnAlignment[], columnStyle?: string[], opts?: PrinterOptions) => Promise<object>;
+    printColumnsText: (texts: string[], columnWidth: number[], columnAlignment: ColumnAlignment[], columnStyle?: string[], opts?: PrinterOptions) => void;
 };
 declare const NetPrinterEventEmitter: NativeEventEmitter;
 export { COMMANDS, NetPrinter, BLEPrinter, USBPrinter, NetPrinterEventEmitter };
