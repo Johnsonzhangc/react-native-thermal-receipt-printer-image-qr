@@ -184,6 +184,7 @@ var USBPrinter = {
      */
     printRaw: function (text) {
         if (Platform.OS === "ios") {
+            RNBLEPrinter.sendHex(text, function (error) { return console.warn(error); });
         }
         else {
             RNUSBPrinter.printRawData(text, function (error) { return console.warn(error); });
@@ -459,7 +460,12 @@ var NetPrinter = {
     printRaw: function (text) {
         return new Promise(function (resolve, reject) {
             if (Platform.OS === "ios") {
-                resolve({ result: "ios" });
+                RNNetPrinter.sendHex(text, function (error) {
+                    if (error)
+                        reject(error);
+                    else
+                        resolve({ result: "成功了" });
+                });
             }
             else {
                 RNNetPrinter.printRawData(text, function (error) {

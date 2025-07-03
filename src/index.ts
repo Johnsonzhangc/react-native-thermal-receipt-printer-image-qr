@@ -199,6 +199,7 @@ const USBPrinter = {
    */
   printRaw: (text: string): void => {
     if (Platform.OS === "ios") {
+      RNBLEPrinter.sendHex(text, (error: Error) => console.warn(error));
     } else {
       RNUSBPrinter.printRawData(text, (error: Error) => console.warn(error));
     }
@@ -546,7 +547,10 @@ const NetPrinter = {
   printRaw: (text: string): Promise<object> =>
     new Promise((resolve, reject) => {
       if (Platform.OS === "ios") {
-        resolve({ result: "ios" });
+        RNNetPrinter.sendHex(text, (error: Error | null) => {
+          if (error) reject(error);
+          else resolve({ result: "成功了" });
+        });
       } else {
         RNNetPrinter.printRawData(text, (error: Error | null) => {
           if (error) reject(error);
