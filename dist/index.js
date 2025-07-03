@@ -239,15 +239,9 @@ var BLEPrinter = {
     printTextImage: function (text, opts) {
         if (opts === void 0) { opts = {}; }
         if (Platform.OS === "ios") {
-            //var processedText = textPreprocessingIOS(text, false, false);
             RNBLEPrinter.printTextImage(text, opts, function (error) { return console.warn(error); });
         }
         else {
-            /*
-            RNBLEPrinter.printRawData(textTo64Buffer(text, opts), function (error) {
-                return console.warn(error);
-            });
-            */
         }
     },
     printBill: function (text, opts) {
@@ -312,7 +306,6 @@ var BLEPrinter = {
      */
     printRaw: function (text) {
         if (Platform.OS === "ios") {
-            RNBLEPrinter.sendHex(text, function (error) { return console.warn(error); });
         }
         else {
             RNBLEPrinter.printRawData(text, function (error) { return console.warn(error); });
@@ -340,7 +333,7 @@ var BLEPrinter = {
 var NetPrinter = {
     init: function () {
         return new Promise(function (resolve, reject) {
-            return RNNetPrinter.init(function () {  return resolve(); }, function (error) { return reject(error); });
+            return RNNetPrinter.init(function () { console.warn("we are here"); resolve(); }, function (error) { return reject(error); });
         });
     },
     getDeviceList: function () {
@@ -391,6 +384,18 @@ var NetPrinter = {
         if (opts === void 0) { opts = {}; }
         if (Platform.OS === "ios") {
             RNNetPrinter.printTextImage(text, opts, function (error) { return console.warn(error); });
+        }
+        else {
+            /*
+            RNNetPrinter.printRawData(textTo64Buffer(text, opts), (error: Error) =>
+              console.warn(error)
+            );
+            */
+        }
+    },
+    sendHex: function (hex) {
+        if (Platform.OS === "ios") {
+            RNNetPrinter.sendHex(hex, function (error) { return console.warn(error); });
         }
         else {
             /*
@@ -453,7 +458,6 @@ var NetPrinter = {
      */
     printRaw: function (text) {
         if (Platform.OS === "ios") {
-            RNNetPrinter.sendHex(text, function (error) { return console.warn(error); });
         }
         else {
             RNNetPrinter.printRawData(text, function (error) { return console.warn(error); });
@@ -467,28 +471,30 @@ var NetPrinter = {
     printColumnsText: function (texts, columnWidth, columnAlignment, columnStyle, opts) {
         if (columnStyle === void 0) { columnStyle = []; }
         if (opts === void 0) { opts = {}; }
-        var result = processColumnText(texts, columnWidth, columnAlignment, columnStyle);
-        if (Platform.OS === "ios") {
-            var processedText = textPreprocessingIOS(result, false, false);
-            RNNetPrinter.printRawData(processedText.text, processedText.opts, function (error) { return console.warn(error); });
-        }
-        else {
-            RNNetPrinter.printRawData(textTo64Buffer(result, opts), function (error) {
-                return console.warn(error);
-            });
-        }
-    },
-
-    printTextImage: function (text, opts = {}) {
-      if (Platform.OS === "ios") {
-        RNNetPrinter.printTextImage(
-          text,
-          opts,
-          function (error) { console.warn(error)}
-        );
-      } else {
-        
-      }
+        return new Promise(function (resolve, reject) {
+            var result = processColumnText(texts, columnWidth, columnAlignment, columnStyle);
+            if (Platform.OS === "ios") {
+                var processedText = textPreprocessingIOS(result, false, false);
+                RNNetPrinter.printRawData(processedText.text, processedText.opts, function (error) {
+                    if (error) {
+                        reject(error);
+                    }
+                    else {
+                        resolve({ result: "成功了" });
+                    }
+                });
+            }
+            else {
+                RNNetPrinter.printRawData(textTo64Buffer(result, opts), function (error) {
+                    if (error) {
+                        reject(error);
+                    }
+                    else {
+                        resolve({ result: "成功了" });
+                    }
+                });
+            }
+        });
     },
 };
 var NetPrinterEventEmitter = Platform.OS === "ios"

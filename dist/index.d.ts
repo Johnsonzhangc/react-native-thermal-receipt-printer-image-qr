@@ -75,7 +75,7 @@ declare const BLEPrinter: {
     connectPrinter: (inner_mac_address: string) => Promise<IBLEPrinter>;
     closeConn: () => Promise<void>;
     printText: (text: string, opts?: PrinterOptions) => void;
-    printTextImage: (text: string, opts?: PrinterOptions) => void;
+    printTextImage: (text: string, opts?: {}) => void;
     printBill: (text: string, opts?: PrinterOptions) => void;
     /**
      * image url
@@ -108,6 +108,7 @@ declare const NetPrinter: {
     closeConn: () => Promise<void>;
     printText: (text: string, opts?: {}) => void;
     printTextImage: (text: string, opts?: {}) => void;
+    sendHex: (hex: string) => void;
     printBill: (text: string, opts?: PrinterOptions) => void;
     /**
      * image url
@@ -131,7 +132,7 @@ declare const NetPrinter: {
      * 80mm => 46 character
      * 58mm => 30 character
      */
-    printColumnsText: (texts: string[], columnWidth: number[], columnAlignment: ColumnAlignment[], columnStyle?: string[], opts?: PrinterOptions) => void;
+    printColumnsText: (texts: string[], columnWidth: number[], columnAlignment: ColumnAlignment[], columnStyle?: string[], opts?: PrinterOptions) => Promise<object>;
 };
 declare const NetPrinterEventEmitter: NativeEventEmitter;
 export { COMMANDS, NetPrinter, BLEPrinter, USBPrinter, NetPrinterEventEmitter };

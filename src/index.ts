@@ -280,7 +280,7 @@ const BLEPrinter = {
         (error: Error) => console.warn(error)
       );
     } else {
-      
+
     }
   },
 
@@ -396,7 +396,7 @@ const NetPrinter = {
   init: (): Promise<void> =>
     new Promise((resolve, reject) =>
       RNNetPrinter.init(
-        () => {console.warn("we are here"); resolve()},
+        () => { console.warn("we are here"); resolve() },
         (error: Error) => reject(error)
       )
     ),
@@ -559,26 +559,39 @@ const NetPrinter = {
     columnAlignment: ColumnAlignment[],
     columnStyle: string[] = [],
     opts: PrinterOptions = {}
-  ): void => {
-    const result = processColumnText(
-      texts,
-      columnWidth,
-      columnAlignment,
-      columnStyle
-    );
-    if (Platform.OS === "ios") {
-      const processedText = textPreprocessingIOS(result, false, false);
-      RNNetPrinter.printRawData(
-        processedText.text,
-        processedText.opts,
-        (error: Error) => console.warn(error)
+  ): Promise<object> =>
+    new Promise((resolve, reject) => {
+      const result = processColumnText(
+        texts,
+        columnWidth,
+        columnAlignment,
+        columnStyle
       );
-    } else {
-      RNNetPrinter.printRawData(textTo64Buffer(result, opts), (error: Error) =>
-        console.warn(error)
-      );
+      if (Platform.OS === "ios") {
+        const processedText = textPreprocessingIOS(result, false, false);
+        RNNetPrinter.printRawData(
+          processedText.text,
+          processedText.opts,
+          (error: Error | null) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve({result: "成功了"});
+            }
+          }
+        );
+      } else {
+        RNNetPrinter.printRawData(textTo64Buffer(result, opts), (error: Error | null) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve({result: "成功了"});
+          }
+        }
+        );
+      }
     }
-  },
+    ),
 };
 
 const NetPrinterEventEmitter =

@@ -1,5 +1,4 @@
 import { Buffer } from "buffer";
-import * as iconv from "iconv-lite";
 // import * as Jimp from "jimp";
 import BufferHelper from "./buffer-helper";
 let EscPosEncoder = require('esc-pos-encoder');
@@ -62,7 +61,7 @@ var default_options = {
     encoding: "UTF8",
 };
 
-function thaiEncodingWrapper(thai) {
+function thaiEncodingWrapper(thai: string) {
 
         let encodingString = encoder
             .codepage('cp874')
@@ -73,7 +72,7 @@ function thaiEncodingWrapper(thai) {
         return encodingString.slice(3);
 }
 
-export function exchange_text(text, options) {
+export function exchange_text(text: string, options: object) {
     var m_options = options || default_options;
     var bytes = new BufferHelper();
     bytes.concat(init_printer_bytes);

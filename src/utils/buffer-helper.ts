@@ -27,7 +27,7 @@ export default class BufferHelper {
 
   toBuffer = (): Buffer => Buffer.concat(this.buffers, this.size);
 
-  toString = (encoding: BufferEncoding): string =>
+  toString = (encoding: string): string =>
     this.toBuffer().toString(encoding);
 
   load = (stream: any, callback: any) => {
